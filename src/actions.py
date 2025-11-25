@@ -19,6 +19,6 @@ def login(driver):
 
 def extract_titles(driver):
     log("Extracting item titles...")
-    titles = driver.find_elements(By.CLASS_NAME, "inventory_item_name")
+    titles = driver.find_elements(By.CLASS_NAME, "inventory_item")
 
     return [t.text for t in titles]
