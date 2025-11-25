@@ -1,6 +1,6 @@
 FROM python:3.14-slim
 
-# Install dependencies for Chrome
+# Install dependencies required for Chrome
 RUN apt-get update && apt-get install -y --no-install-recommends \
     wget \
     gnupg \
@@ -13,8 +13,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libgconf-2-4 \
     libfontconfig1 \
     libxss1 \
-    libappindicator1 \
-    libindicator7 \
+    libappindicator3-1 \
     libgbm1 \
     libgtk-3-0 \
     xvfb \
