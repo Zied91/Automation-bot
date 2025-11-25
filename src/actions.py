@@ -24,8 +24,8 @@ def extract_titles(driver):
 
     wait = WebDriverWait(driver, IMPLICIT_WAIT)
     wait.until(
-        EC.presence_of_all_elements_located((By.CLASS_NAME, "inventory_item"))
+        EC.presence_of_all_elements_located((By.CLASS_NAME, "inventory_item_name"))
     )
-    titles = driver.find_elements(By.CLASS_NAME, "inventory_item")
+    titles = driver.find_elements(By.CLASS_NAME, "inventory_item_name")
 
     return [t.text for t in titles]
