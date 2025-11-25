@@ -1,16 +1,30 @@
 FROM python:3.12-slim
 
-# Install Chrome dependencies
-RUN apt-get update && apt-get install -y \
-    wget gnupg unzip curl libglib2.0-0 libnss3 libgconf-2-4 libfontconfig1 \
-    libxss1 libappindicator1 libindicator7 libgbm1 libgtk-3-0 xvfb \
-    --no-install-recommends && \
-    rm -rf /var/lib/apt/lists/*
+# Install dependencies for Chrome
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    wget \
+    gnupg \
+    unzip \
+    curl \
+    ca-certificates \
+    apt-transport-https \
+    libglib2.0-0 \
+    libnss3 \
+    libgconf-2-4 \
+    libfontconfig1 \
+    libxss1 \
+    libappindicator1 \
+    libindicator7 \
+    libgbm1 \
+    libgtk-3-0 \
+    xvfb \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install Google Chrome
-RUN wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
-    apt-get install -y ./google-chrome-stable_current_amd64.deb || true && \
-    rm google-chrome-stable_current_amd64.deb
+RUN wget -q -O /tmp/google-chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends /tmp/google-chrome.deb \
+    && rm -rf /var/lib/apt/lists/* /tmp/google-chrome.deb
 
 # Install ChromeDriver matching Chrome version
 RUN CHROME_VERSION=$(google-chrome --version | awk '{print $3}') && \
@@ -24,11 +38,12 @@ RUN CHROME_VERSION=$(google-chrome --version | awk '{print $3}') && \
 # Set working directory
 WORKDIR /app
 
-# Copy project
+# Copy project files
 COPY . /app
 
 # Install Python dependencies
+RUN pip install --no-cache-dir --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Run tests by default
+# Default command: run tests
 CMD ["pytest", "-v"]
